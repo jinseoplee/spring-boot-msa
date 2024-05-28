@@ -10,8 +10,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class MultiplicationAttemptResponse {
-    private String nickname;
-
     @JsonProperty("multiplication")
     private MultiplicationDto multiplicationDto;
 

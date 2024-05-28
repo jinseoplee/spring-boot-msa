@@ -53,7 +53,7 @@ class MultiplicationAttemptControllerTest {
     private void genericParameterizedTest(boolean correct) throws Exception {
         // given
         MultiplicationAttemptRequest multiplicationAttemptRequest = new MultiplicationAttemptRequest("ljs", new MultiplicationDto(10, 20), 200);
-        MultiplicationAttemptResponse multiplicationAttemptResponse = new MultiplicationAttemptResponse("ljs", new MultiplicationDto(10, 20), 200, correct);
+        MultiplicationAttemptResponse multiplicationAttemptResponse = new MultiplicationAttemptResponse(new MultiplicationDto(10, 20), 200, correct);
         given(multiplicationService.checkAnswer(any(MultiplicationAttemptRequest.class))).willReturn(correct);
 
         // when

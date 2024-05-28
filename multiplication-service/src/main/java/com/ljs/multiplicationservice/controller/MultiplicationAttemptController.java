@@ -21,7 +21,6 @@ public class MultiplicationAttemptController {
     public ResponseEntity<MultiplicationAttemptResponse> postAnswer(@Valid @RequestBody MultiplicationAttemptRequest request) {
         boolean correct = multiplicationService.checkAnswer(request);
         MultiplicationAttemptResponse body = new MultiplicationAttemptResponse(
-                request.getNickname(),
                 request.getMultiplicationDto(),
                 request.getAnswer(),
                 correct
