@@ -1,14 +1,15 @@
 package com.ljs.userservice.service;
 
+import com.ljs.userservice.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UserServiceImplTest {
@@ -27,16 +28,17 @@ public class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("닉네임 저장 성공 테스트")
+    @DisplayName("사용자 닉네임 저장 성공 테스트")
     public void saveNicknameSuccessTest() {
         // given
-        String nickname = "ljs";
+        UserDto userDto = new UserDto();
+        userDto.setNickname("ljs");
 
         // when
         when(redisTemplate.opsForSet()).thenReturn(setOperations);
-        userService.saveNickname(nickname);
+        userService.saveUser(userDto);
 
         // then
-        Mockito.verify(setOperations).add("nickname", nickname);
+        verify(setOperations).add("nickname", userDto.getNickname());
     }
 }

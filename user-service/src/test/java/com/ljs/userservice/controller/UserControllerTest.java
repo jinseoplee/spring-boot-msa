@@ -19,6 +19,8 @@ import java.nio.charset.Charset;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(UserController.class)
@@ -37,12 +39,13 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("닉네임 생성 요청이 성공함")
+    @DisplayName("닉네임 생성 API 호출 성공")
     public void saveNicknameSuccessTest() throws Exception {
         // given
         String nickname = "ljs";
         UserDto userDto = new UserDto();
         userDto.setNickname(nickname);
+        given(userService.saveUser(any(UserDto.class))).willReturn(userDto);
 
         // when
         MockHttpServletResponse response = mvc.perform(post("/api/users")
@@ -52,15 +55,15 @@ class UserControllerTest {
 
         // then
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+        assertEquals(json.write(userDto).getJson(), response.getContentAsString());
     }
 
     @Test
-    @DisplayName("닉네임이 누락된 경우 닉네임 생성 요청이 실패함")
+    @DisplayName("닉네임 생성 API 호출 실패 - 닉네임 누락")
     public void saveNicknameFailTest() throws Exception {
         // given
-        String nickname = " ";
         UserDto userDto = new UserDto();
-        userDto.setNickname(nickname);
+        userDto.setNickname(" ");
 
         // when
         MockHttpServletResponse response = mvc.perform(post("/api/users")
