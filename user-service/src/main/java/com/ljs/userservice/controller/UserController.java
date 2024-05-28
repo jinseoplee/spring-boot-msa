@@ -18,8 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<Void> saveNickname(@Valid @RequestBody UserDto request) {
-        userService.saveNickname(request.getNickname());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<UserDto> saveNickname(@Valid @RequestBody UserDto request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(request));
     }
 }
