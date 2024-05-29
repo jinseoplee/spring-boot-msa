@@ -1,14 +1,12 @@
 package com.ljs.multiplicationservice.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * 곱셈에 대한 정보(A * B)를 나타내는 DTO 클래스
  */
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
