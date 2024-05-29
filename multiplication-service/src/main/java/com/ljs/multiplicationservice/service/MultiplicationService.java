@@ -1,7 +1,10 @@
 package com.ljs.multiplicationservice.service;
 
 import com.ljs.multiplicationservice.dto.MultiplicationAttemptRequest;
+import com.ljs.multiplicationservice.dto.MultiplicationAttemptResponse;
 import com.ljs.multiplicationservice.dto.MultiplicationDto;
+
+import java.util.List;
 
 public interface MultiplicationService {
     /**
@@ -16,4 +19,12 @@ public interface MultiplicationService {
      * @return 곱셈 결과가 맞으면 true, 틀리면 false
      */
     boolean checkAnswer(MultiplicationAttemptRequest request);
+
+    /**
+     * 사용자의 최근 곱셈 시도 목록을 반환한다.
+     *
+     * @param nickname 사용자 닉네임
+     * @return 사용자의 최근 곱셈 시도 목록
+     */
+    List<MultiplicationAttemptResponse> getUserRecentAttempts(String nickname);
 }

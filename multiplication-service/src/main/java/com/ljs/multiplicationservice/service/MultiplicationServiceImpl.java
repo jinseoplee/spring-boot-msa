@@ -1,12 +1,16 @@
 package com.ljs.multiplicationservice.service;
 
 import com.ljs.multiplicationservice.dto.MultiplicationAttemptRequest;
+import com.ljs.multiplicationservice.dto.MultiplicationAttemptResponse;
 import com.ljs.multiplicationservice.dto.MultiplicationDto;
 import com.ljs.multiplicationservice.entity.Multiplication;
 import com.ljs.multiplicationservice.entity.MultiplicationAttempt;
 import com.ljs.multiplicationservice.repository.MultiplicationAttemptRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -44,5 +48,13 @@ public class MultiplicationServiceImpl implements MultiplicationService {
 
         // 곱셈 결과를 반환
         return correct;
+    }
+
+    @Override
+    public List<MultiplicationAttemptResponse> getUserRecentAttempts(String nickname) {
+        List<MultiplicationAttempt> recentAttempts = multiplicationAttemptRepository.findTop5ByNicknameOrderByIdDesc(nickname);
+        return recentAttempts.stream()
+                .map(MultiplicationAttemptResponse::from)
+                .collect(Collectors.toList());
     }
 }

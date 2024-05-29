@@ -6,18 +6,17 @@ import com.ljs.multiplicationservice.service.MultiplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/multiplication")
+@RequestMapping("/api/multiplication/attempt")
 public class MultiplicationAttemptController {
     private final MultiplicationService multiplicationService;
 
-    @PostMapping("/attempt")
+    @PostMapping
     public ResponseEntity<MultiplicationAttemptResponse> postAnswer(@Valid @RequestBody MultiplicationAttemptRequest request) {
         boolean correct = multiplicationService.checkAnswer(request);
         MultiplicationAttemptResponse body = new MultiplicationAttemptResponse(
@@ -26,5 +25,10 @@ public class MultiplicationAttemptController {
                 correct
         );
         return ResponseEntity.ok(body);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MultiplicationAttemptResponse>> getUserRecentAttempts(@RequestParam("nickname") String nickname) {
+        return ResponseEntity.ok(multiplicationService.getUserRecentAttempts(nickname));
     }
 }
