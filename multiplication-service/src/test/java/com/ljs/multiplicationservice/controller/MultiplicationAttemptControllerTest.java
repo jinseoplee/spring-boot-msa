@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ljs.multiplicationservice.dto.MultiplicationAttemptRequest;
 import com.ljs.multiplicationservice.dto.MultiplicationAttemptResponse;
 import com.ljs.multiplicationservice.dto.MultiplicationDto;
+import com.ljs.multiplicationservice.entity.Multiplication;
+import com.ljs.multiplicationservice.entity.MultiplicationAttempt;
 import com.ljs.multiplicationservice.service.MultiplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,9 +19,14 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(MultiplicationAttemptController.class)
@@ -32,6 +39,7 @@ class MultiplicationAttemptControllerTest {
 
     private JacksonTester<MultiplicationAttemptRequest> jsonRequest;
     private JacksonTester<MultiplicationAttemptResponse> jsonResponse;
+    private JacksonTester<List<MultiplicationAttemptResponse>> jsonResponseList;
 
     @BeforeEach
     public void setUp() {
@@ -65,5 +73,32 @@ class MultiplicationAttemptControllerTest {
         // then
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(jsonResponse.write(multiplicationAttemptResponse).getJson(), response.getContentAsString());
+    }
+
+    @Test
+    @DisplayName("사용자의 최근 곱셈 시도 목록을 조회하는 API 테스트")
+    public void getUserRecentAttempts() throws Exception {
+        // given
+        Multiplication multiplication = new Multiplication(10, 20);
+        MultiplicationAttempt attempt1 = new MultiplicationAttempt("ljs", multiplication, 200, true);
+        MultiplicationAttempt attempt2 = new MultiplicationAttempt("ljs", multiplication, 2000, false);
+
+        List<MultiplicationAttempt> recentAttempts = Arrays.asList(attempt1, attempt2);
+        List<MultiplicationAttemptResponse> expectedResponse = recentAttempts.stream()
+                .map(MultiplicationAttemptResponse::from)
+                .collect(Collectors.toList());
+
+        given(multiplicationService.getUserRecentAttempts("ljs"))
+                .willReturn(expectedResponse);
+
+        // when
+        MockHttpServletResponse response = mvc.perform(get("/api/multiplication/attempt")
+                        .param("nickname", "ljs")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // then
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(jsonResponseList.write(expectedResponse).getJson(), response.getContentAsString());
     }
 }

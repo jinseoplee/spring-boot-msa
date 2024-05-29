@@ -1,7 +1,9 @@
 package com.ljs.multiplicationservice.service;
 
 import com.ljs.multiplicationservice.dto.MultiplicationAttemptRequest;
+import com.ljs.multiplicationservice.dto.MultiplicationAttemptResponse;
 import com.ljs.multiplicationservice.dto.MultiplicationDto;
+import com.ljs.multiplicationservice.entity.Multiplication;
 import com.ljs.multiplicationservice.entity.MultiplicationAttempt;
 import com.ljs.multiplicationservice.repository.MultiplicationAttemptRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +11,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -72,5 +78,29 @@ public class MultiplicationServiceImplTest {
         // then
         assertFalse(result);
         verify(multiplicationAttemptRepository).save(any(MultiplicationAttempt.class));
+    }
+
+    @Test
+    @DisplayName("사용자가 최근 제출한 곱셈 문제를 반환하는 테스트")
+    public void getUserRecentAttemptsTest() {
+        // given
+        Multiplication multiplication = new Multiplication(10, 20);
+        MultiplicationAttempt attempt1 = new MultiplicationAttempt("ljs", multiplication, 200, true);
+        MultiplicationAttempt attempt2 = new MultiplicationAttempt("ljs", multiplication, 2000, false);
+
+        List<MultiplicationAttempt> recentMultiplicationAttempts = Arrays.asList(attempt1, attempt2);
+
+        List<MultiplicationAttemptResponse> recentMultiplicationAttemptResponses = recentMultiplicationAttempts.stream()
+                .map(MultiplicationAttemptResponse::from)
+                .collect(Collectors.toList());
+
+        given(multiplicationAttemptRepository.findTop5ByNicknameOrderByIdDesc("ljs"))
+                .willReturn(recentMultiplicationAttempts);
+
+        // when
+        List<MultiplicationAttemptResponse> result = multiplicationService.getUserRecentAttempts("ljs");
+
+        // then
+        assertEquals(recentMultiplicationAttemptResponses, result);
     }
 }
