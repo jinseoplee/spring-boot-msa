@@ -23,5 +23,10 @@ public class EventDispatcher {
 
 
     public void send(MultiplicationSolvedEvent multiplicationSolvedEvent) {
+        rabbitTemplate.convertAndSend(
+                multiplicationExchange,
+                multiplicationRoutingKey,
+                multiplicationSolvedEvent
+        );
     }
 }

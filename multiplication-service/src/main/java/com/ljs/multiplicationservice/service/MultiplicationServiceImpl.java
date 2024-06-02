@@ -6,9 +6,11 @@ import com.ljs.multiplicationservice.dto.MultiplicationDto;
 import com.ljs.multiplicationservice.entity.Multiplication;
 import com.ljs.multiplicationservice.entity.MultiplicationAttempt;
 import com.ljs.multiplicationservice.event.EventDispatcher;
+import com.ljs.multiplicationservice.event.MultiplicationSolvedEvent;
 import com.ljs.multiplicationservice.repository.MultiplicationAttemptRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,6 +30,7 @@ public class MultiplicationServiceImpl implements MultiplicationService {
         return new MultiplicationDto(factorA, factorB);
     }
 
+    @Transactional
     @Override
     public boolean checkAnswer(MultiplicationAttemptRequest request) {
         // 정답 채점
@@ -48,6 +51,13 @@ public class MultiplicationServiceImpl implements MultiplicationService {
 
         // 답안을 저장
         multiplicationAttemptRepository.save(multiplicationAttempt);
+
+        // 이벤트로 결과를 전송
+        eventDispatcher.send(new MultiplicationSolvedEvent(
+                multiplicationAttempt.getId(),
+                multiplicationAttempt.getNickname(),
+                multiplicationAttempt.isCorrect()
+        ));
 
         // 곱셈 결과를 반환
         return correct;
