@@ -5,6 +5,8 @@ import com.ljs.multiplicationservice.dto.MultiplicationAttemptResponse;
 import com.ljs.multiplicationservice.dto.MultiplicationDto;
 import com.ljs.multiplicationservice.entity.Multiplication;
 import com.ljs.multiplicationservice.entity.MultiplicationAttempt;
+import com.ljs.multiplicationservice.event.EventDispatcher;
+import com.ljs.multiplicationservice.event.MultiplicationSolvedEvent;
 import com.ljs.multiplicationservice.repository.MultiplicationAttemptRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,11 +33,13 @@ public class MultiplicationServiceImplTest {
     @Mock
     private RandomGeneratorService randomGeneratorService;
 
+    @Mock
+    private EventDispatcher eventDispatcher;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        multiplicationService = new MultiplicationServiceImpl(multiplicationAttemptRepository, randomGeneratorService);
+        multiplicationService = new MultiplicationServiceImpl(multiplicationAttemptRepository, randomGeneratorService, eventDispatcher);
     }
 
     @Test
@@ -64,6 +68,7 @@ public class MultiplicationServiceImplTest {
         // then
         assertTrue(result);
         verify(multiplicationAttemptRepository).save(any(MultiplicationAttempt.class));
+        verify(eventDispatcher).send(any(MultiplicationSolvedEvent.class));
     }
 
     @Test
@@ -78,6 +83,7 @@ public class MultiplicationServiceImplTest {
         // then
         assertFalse(result);
         verify(multiplicationAttemptRepository).save(any(MultiplicationAttempt.class));
+        verify(eventDispatcher).send(any(MultiplicationSolvedEvent.class));
     }
 
     @Test
