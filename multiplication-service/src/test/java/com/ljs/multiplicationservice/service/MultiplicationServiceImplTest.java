@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -108,5 +109,22 @@ public class MultiplicationServiceImplTest {
 
         // then
         assertEquals(recentMultiplicationAttemptResponses, result);
+    }
+
+    @Test
+    @DisplayName("곱셈 시도 ID로 사용자가 제출한 곱셈 시도를 조회하는 테스트")
+    public void getAttemptByIdTest() {
+        // given
+        Multiplication multiplication = new Multiplication(10, 20);
+        MultiplicationAttempt attempt = new MultiplicationAttempt("ljs", multiplication, 200, true);
+        MultiplicationAttemptResponse expectedResponse = MultiplicationAttemptResponse.from(attempt);
+
+        given(multiplicationAttemptRepository.findById(1L)).willReturn(Optional.of(attempt));
+
+        // when
+        MultiplicationAttemptResponse actualResponse = multiplicationService.getAttemptById(1L);
+
+        // then
+        assertEquals(expectedResponse, actualResponse);
     }
 }

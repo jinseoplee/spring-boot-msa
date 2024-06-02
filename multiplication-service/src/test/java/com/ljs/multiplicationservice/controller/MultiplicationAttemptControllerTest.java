@@ -101,4 +101,23 @@ class MultiplicationAttemptControllerTest {
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(jsonResponseList.write(expectedResponse).getJson(), response.getContentAsString());
     }
+
+    @Test
+    @DisplayName("곱셈 시도 ID로 곱셈 시도를 조회하는 API 테스트")
+    public void getAttemptByIdTest() throws Exception {
+        // given
+        Long attemptId = 1L;
+        MultiplicationDto multiplicationDto = new MultiplicationDto(10, 20);
+        MultiplicationAttemptResponse expectedResponse = new MultiplicationAttemptResponse(multiplicationDto, 200, false);
+        given(multiplicationService.getAttemptById(attemptId)).willReturn(expectedResponse);
+
+        // when
+        MockHttpServletResponse response = mvc.perform(get("/api/multiplication/attempt/" + attemptId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // then
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(jsonResponse.write(expectedResponse).getJson(), response.getContentAsString());
+    }
 }
