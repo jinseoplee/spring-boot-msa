@@ -27,4 +27,12 @@ public interface MultiplicationService {
      * @return 사용자의 최근 곱셈 시도 목록
      */
     List<MultiplicationAttemptResponse> getUserRecentAttempts(String nickname);
+
+    /**
+     * ID에 해당하는 곱셈 시도를 조회한다.
+     *
+     * @param resultId 곱셈 시도 ID
+     * @return ID에 해당하는 {@link MultiplicationAttemptResponse} 객체, 없으면 null
+     */
+    MultiplicationAttemptResponse getAttemptById(Long attemptId);
 }

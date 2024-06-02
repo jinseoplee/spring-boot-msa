@@ -5,11 +5,13 @@ import com.ljs.multiplicationservice.dto.MultiplicationAttemptResponse;
 import com.ljs.multiplicationservice.dto.MultiplicationDto;
 import com.ljs.multiplicationservice.entity.Multiplication;
 import com.ljs.multiplicationservice.entity.MultiplicationAttempt;
+import com.ljs.multiplicationservice.event.EventDispatcher;
 import com.ljs.multiplicationservice.repository.MultiplicationAttemptRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class MultiplicationServiceImpl implements MultiplicationService {
     private final MultiplicationAttemptRepository multiplicationAttemptRepository;
     private final RandomGeneratorService randomGeneratorService;
+    private final EventDispatcher eventDispatcher;
 
     @Override
     public MultiplicationDto createRandomMultiplication() {
@@ -56,5 +59,13 @@ public class MultiplicationServiceImpl implements MultiplicationService {
         return recentAttempts.stream()
                 .map(MultiplicationAttemptResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public MultiplicationAttemptResponse getAttemptById(Long attemptId) {
+        MultiplicationAttempt savedAttempt = multiplicationAttemptRepository.findById(attemptId)
+                .orElseThrow(() -> new NoSuchElementException("값이 존재하지 않습니다."));
+
+        return MultiplicationAttemptResponse.from(savedAttempt);
     }
 }

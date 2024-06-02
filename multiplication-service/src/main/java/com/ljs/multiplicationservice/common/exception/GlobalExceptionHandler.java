@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     /**
@@ -37,6 +39,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e,
                                                                                HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, "유효하지 않은 JSON 포맷입니다.", request.getRequestURI());
+    }
+
+    /**
+     * 요소나 값이 존재하지 않을 때 발생하는 예외를 처리한다.
+     *
+     * @param e       발생한 예외
+     * @param request 클라이언트의 HTTP 요청
+     * @return HTTP 상태 코드 400과 오류 메시지를 포함한 ResponseEntity
+     */
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException e,
+                                                                      HttpServletRequest request) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request.getRequestURI());
     }
 
     /**

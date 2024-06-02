@@ -31,4 +31,9 @@ public class MultiplicationAttemptController {
     public ResponseEntity<List<MultiplicationAttemptResponse>> getUserRecentAttempts(@RequestParam("nickname") String nickname) {
         return ResponseEntity.ok(multiplicationService.getUserRecentAttempts(nickname));
     }
+
+    @GetMapping("/{attemptId}")
+    public ResponseEntity<MultiplicationAttemptResponse> getAttemptById(@PathVariable("attemptId") Long attemptId) {
+        return ResponseEntity.ok(multiplicationService.getAttemptById(attemptId));
+    }
 }
