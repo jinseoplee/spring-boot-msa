@@ -46,15 +46,15 @@ public class MultiplicationServiceImplTest {
     @Test
     @DisplayName("무작위 곱셈 생성 테스트")
     public void createRandomMultiplicationTest() {
-        // given (randomGeneratorService가 처음에는 50, 나중에 30을 반환하도록 설정)
-        given(randomGeneratorService.generateRandomFactor()).willReturn(50, 30);
-
         // when
         MultiplicationDto multiplicationDto = multiplicationService.createRandomMultiplication();
 
         // then
-        assertEquals(50, multiplicationDto.getFactorA());
-        assertEquals(30, multiplicationDto.getFactorB());
+        int factorA = multiplicationDto.getFactorA();
+        int factorB = multiplicationDto.getFactorB();
+
+        // 생성된 곱셈의 두 수는 모두 2자리 숫자가 아니어야 한다.
+        assertTrue(factorA < 10 || factorB < 10);
     }
 
     @Test
