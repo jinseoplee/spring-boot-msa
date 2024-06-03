@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -22,11 +23,21 @@ public class MultiplicationServiceImpl implements MultiplicationService {
     private final MultiplicationAttemptRepository multiplicationAttemptRepository;
     private final RandomGeneratorService randomGeneratorService;
     private final EventDispatcher eventDispatcher;
+    private final Random random = new Random();
 
     @Override
     public MultiplicationDto createRandomMultiplication() {
-        int factorA = randomGeneratorService.generateRandomFactor();
-        int factorB = randomGeneratorService.generateRandomFactor();
+        int factorA;
+        int factorB;
+
+        if (random.nextBoolean()) { // 50% 확률
+            factorA = randomGeneratorService.generateSingleDigitFactor();
+            factorB = randomGeneratorService.generateTwoDigitFactor();
+        } else {
+            factorA = randomGeneratorService.generateTwoDigitFactor();
+            factorB = randomGeneratorService.generateSingleDigitFactor();
+        }
+
         return new MultiplicationDto(factorA, factorB);
     }
 
