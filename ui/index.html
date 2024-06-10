@@ -17,16 +17,38 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg shadow-sm mb-5">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index.html">브레인 피트니스</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/index.html">곱셈 게임</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-md-12">
                 <h1 class="text-center">곱셈 게임</h1>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6 mb-5">
-                <div class="mb-5">
+        <div class="row mb-5">
+            <!-- left side -->
+            <div class="col-md-6">
+                <!-- 랜덤 곱셈 문제 -->
+                <div class="border border-light-subtle rounded mb-5 p-3">
                     <h2 class="text-center">오늘의 문제</h2>
                     <h2 class="text-center">
                         <span id="multiplication-a"></span> X <span id="multiplication-b"></span>
@@ -40,13 +62,14 @@
                             <label for="nickname" class="form-label">닉네임</label>
                             <input type="text" class="form-control" id="nickname">
                         </div>
-                        <input type="submit" value="제출" class="btn btn-success mb-3">
+                        <input type="submit" value="제출" class="btn btn-primary">
                     </form>
                     <div id="result-message"></div>
                 </div>
 
-                <div id="statistics">
-                    <h2>통계</h2>
+                <!-- 사용자 통계 -->
+                <div id="statistics" class="border border-light-subtle rounded mb-5 p-3">
+                    <h2 class="text-center">통계</h2>
                     <table class="table">
                         <tr>
                             <th>사용자 ID</th>
@@ -64,8 +87,10 @@
                 </div>
             </div>
 
+            <!-- right side -->
             <div class="col-md-6">
-                <div class="mb-5">
+                <!-- 리더 보드 -->
+                <div class="border border-light-subtle rounded mb-5 p-3">
                     <h2 class="text-center">리더보드</h2>
                     <table id="leaderboard" class="table">
                         <thead>
@@ -80,15 +105,18 @@
                     </table>
                 </div>
 
-                <h2 class="text-center">최근 답안</h2>
-                <table id="attempt" class="table">
-                    <thead>
-                        <th>곱셈</th>
-                        <th>입력한 값</th>
-                        <th>정답</th>
-                    </thead>
-                    <tbody id="attempt-body"></tbody>
-                </table>
+                <!-- 사용자의 최근 답안 -->
+                <div class="border border-light-subtle rounded mb-5 p-3">
+                    <h2 class="text-center">최근 답안</h2>
+                    <table id="attempt" class="table">
+                        <thead>
+                            <th>곱셈</th>
+                            <th>입력한 값</th>
+                            <th>정답</th>
+                        </thead>
+                        <tbody id="attempt-body"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 </body>
