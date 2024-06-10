@@ -51,7 +51,7 @@ $(document).ready(function () {
     var nickname = $("#nickname").val();
 
     // 정답 또는 닉네임을 입력하지 않은 경우
-    if (answer == "") {
+    if (answer == "" || nickname == "") {
       alert("정답과 닉네임 모두 입력해 주세요.");
       return;
     }
@@ -78,13 +78,13 @@ $(document).ready(function () {
           $("#result-message")
             .empty()
             .append(
-              "<p class='alert alert-success text-center'>정답입니다.</p>"
+              "<p class='alert alert-info text-center mt-3'>정답입니다.</p>"
             );
         } else {
           $("#result-message")
             .empty()
             .append(
-              "<p class='alert alert-danger text-center'>오답입니다.</p>"
+              "<p class='alert alert-danger text-center mt-3'>오답입니다.</p>"
             );
         }
       },
@@ -92,8 +92,9 @@ $(document).ready(function () {
 
     updateMultiplication();
 
-    getUserRecentAttempts(nickname);
-
-    updateStatistics(nickname);
+    setTimeout(() => {
+      getUserRecentAttempts(nickname);
+      updateStatistics(nickname);
+    }, 300);
   });
 });
