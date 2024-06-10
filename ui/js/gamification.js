@@ -2,7 +2,6 @@ var SERVER_URL = "http://127.0.0.1:8000/api";
 
 function startLeaderboardUpdates() {
   var eventSource = new EventSource(SERVER_URL + "/leaderboard");
-
   eventSource.onmessage = function (event) {
     var data = JSON.parse(event.data);
     updateLeaderboard(data);
@@ -31,7 +30,6 @@ function updateStatistics(userId) {
   $.ajax({
     url: SERVER_URL + "/statistics?userId=" + userId,
     success: function (data) {
-      console.log(data.badges);
       $("#statistics").show();
       $("#statistics-userId").empty().append(userId);
       $("#statistics-score").empty().append(data.score);
