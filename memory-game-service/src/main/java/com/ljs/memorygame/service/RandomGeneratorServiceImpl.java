@@ -1,7 +1,10 @@
 package com.ljs.memorygame.service;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Random;
 
+@Service
 public class RandomGeneratorServiceImpl implements RandomGeneratorService {
     public static final int MINIMUM = 1;
     public static final int MAXIMUM = 99;
